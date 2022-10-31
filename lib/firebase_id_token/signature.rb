@@ -71,6 +71,7 @@ module FirebaseIdToken
     def initialize(jwt_token, raise_error: false)
       @raise_error = raise_error
       @project_ids = FirebaseIdToken.configuration.project_ids
+      @unsigned = FirebaseIdToken.configuration.unsigned
       @kid = extract_kid(jwt_token)
       @jwt_token = jwt_token
       @firebase_id_token_certificates = FirebaseIdToken.configuration.certificates
@@ -79,9 +80,9 @@ module FirebaseIdToken
     # @see Signature.verify
     def verify
       certificate = firebase_id_token_certificates.find(@kid, raise_error: @raise_error)
-      return unless certificate
+      return if !certificate && !@unsigned
 
-      payload = decode_jwt_payload(@jwt_token, certificate.public_key)
+      payload = decode_jwt_payload(@jwt_token, certificate&.public_key)
       authorize payload
     end
 
@@ -96,7 +97,7 @@ module FirebaseIdToken
     end
 
     def decode_jwt_payload(token, cert_key)
-      JWT.decode(token, cert_key, true, JWT_DEFAULTS).first
+      JWT.decode(token, cert_key, !cert_key.nil?, JWT_DEFAULTS).first
     rescue StandardError
       return nil unless @raise_error
 
