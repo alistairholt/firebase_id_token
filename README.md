@@ -10,7 +10,7 @@ A Ruby gem to verify the signature of Firebase ID Tokens. It uses Redis to store
 
 It also checks the JWT payload parameters as recommended [here](https://firebase.google.com/docs/auth/admin/verify-id-tokens) by Firebase official documentation.
 
-Feel free to open any issue or to [contact me](https://fschuindt.github.io/blog/about/) directly.  
+Feel free to open any issue or to [contact me](https://fschuindt.github.io/blog/about/) directly.
 Any contribution is welcome.
 
 ## Docs
@@ -51,7 +51,7 @@ end
 
 *If you want to verify signatures from more than one Firebase project, just add more Project IDs to the list.*
 
-You can also pass a Redis instance to `config` if you are not using Redis defaults.  
+You can also pass a Redis instance to `config` if you are not using Redis defaults.
 In this case, you must have the gem `redis` in your `Gemfile`.
 ```ruby
 FirebaseIdToken.configure do |config|
@@ -179,7 +179,7 @@ FirebaseIdToken::Signature.verify('aaaaaa')
 
 In case you need, here's a example of the payload structure from a Google login in JSON.
 ```json
-{  
+{
    "iss":"https://securetoken.google.com/firebase-id-token",
    "name":"Ugly Bob",
    "picture":"https://someurl.com/photo.jpg",
@@ -191,12 +191,12 @@ In case you need, here's a example of the payload structure from a Google login 
    "exp":33029000017,
    "email":"uglybob@emailurl.com",
    "email_verified":true,
-   "firebase":{  
-      "identities":{  
-         "google.com":[  
+   "firebase":{
+      "identities":{
+         "google.com":[
             "1010101010101010101"
          ],
-         "email":[  
+         "email":[
             "uglybob@emailurl.com"
          ]
       },
@@ -208,7 +208,7 @@ In case you need, here's a example of the payload structure from a Google login 
 
 
 ## Development
-The test suite can be run with `bundle exec rake rspec`
+The test suite can be run with `bundle exec rake spec`
 
 
 The test mode is prepared as preparation for the test.
@@ -255,7 +255,7 @@ module Api
         @routes = Engine.routes
         @user = users(:one)
       end
-        
+
       def create_token(sub: nil)
         _payload = payload.merge({sub: sub})
         JWT.encode _payload, OpenSSL::PKey::RSA.new(FirebaseIdToken::Testing::Certificates.private_key), 'RS256'
