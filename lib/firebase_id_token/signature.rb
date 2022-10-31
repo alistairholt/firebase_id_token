@@ -117,8 +117,9 @@ module FirebaseIdToken
     end
 
     def still_valid?(payload)
-      payload['exp'].to_i > Time.current.to_i &&
-      payload['iat'].to_i <= Time.current.to_i
+      now = (Time.respond_to?(:current) ? Time.current : Time.now).to_i
+      payload['exp'].to_i > now &&
+      payload['iat'].to_i <= now
     end
 
     def issuer_authorized?(payload)
